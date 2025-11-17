@@ -16,6 +16,12 @@ Login With Incorrect Password
     Set Password  kalle456
     Click Button  Login
     Login Should Fail With Message  Invalid username or password
+    
+Login With Nonexistent Username
+    Set Username  nonexistent
+    Set Password  wrongpassword
+    Click Button  Login
+    Login Should Fail With Message  Invalid username or password
 
 *** Keywords ***
 Login Should Succeed
