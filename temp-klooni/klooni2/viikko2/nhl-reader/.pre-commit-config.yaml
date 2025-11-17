@@ -1,0 +1,9 @@
+repos:
+- repo: local
+  hooks:
+    - id: pylint
+      name: pylint
+      entry: bash -c 'cd /Users/eelis/Desktop/TKT/ohtu/palautusrepositorio/viikko2/nhl-reader && poetry run pylint src'
+      language: system
+      types: [python]
+      pass_filenames: false
