@@ -12,17 +12,27 @@ class TennisGame:
         self.player2_name = player2_name
         self.player1_score = 0
         self.player2_score = 0
-
+    
     def won_point(self, player_name):
         if player_name == "player1":
             self.player1_score = self.player1_score + 1
         else:
             self.player2_score = self.player2_score + 1
-
+    
+    def score_name(self, score):
+        """Palauttaa pistemäärää vastaavan nimen."""
+        score_names = {
+            self.love: "Love",
+            self.fifteen: "Fifteen",
+            self.thirty: "Thirty",
+            self.forty: "Forty"
+        }
+        return score_names[score]
+    
     def get_score(self):
         score = ""
         temp_score = 0
-
+        
         if self.player1_score == self.player2_score:
             if self.player1_score == self.love:
                 score = "Love-All"
@@ -34,7 +44,7 @@ class TennisGame:
                 score = "Deuce"
         elif self.player1_score >= self.win_threshold or self.player2_score >= self.win_threshold:
             minus_result = self.player1_score - self.player2_score
-
+            
             if minus_result == 1:
                 score = "Advantage player1"
             elif minus_result == -1:
@@ -50,14 +60,7 @@ class TennisGame:
                 else:
                     score = score + "-"
                     temp_score = self.player2_score
-
-                if temp_score == self.love:
-                    score = score + "Love"
-                elif temp_score == self.fifteen:
-                    score = score + "Fifteen"
-                elif temp_score == self.thirty:
-                    score = score + "Thirty"
-                elif temp_score == self.forty:
-                    score = score + "Forty"
-
+                
+                score = score + self.score_name(temp_score)
+        
         return score
