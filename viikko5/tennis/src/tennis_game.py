@@ -1,22 +1,22 @@
 class TennisGame:
-    love = 0
-    fifteen = 1
-    thirty = 2
-    forty = 3
-    win_threshold = 4
-    win_margin = 2
+    LOVE = 0
+    FIFTEEN = 1
+    THIRTY = 2
+    FORTY = 3
+    WIN_THRESHOLD = 4
+    WIN_MARGIN = 2
 
     _SCORE_NAMES = {
-        love: "Love",
-        fifteen: "Fifteen",
-        thirty: "Thirty",
-        forty: "Forty"
+        LOVE: "Love",
+        FIFTEEN: "Fifteen",
+        THIRTY: "Thirty",
+        FORTY: "Forty"
     }
 
     _EVEN_SCORE_NAMES = {
-        love: "Love-All",
-        fifteen: "Fifteen-All",
-        thirty: "Thirty-All"
+        LOVE: "Love-All",
+        FIFTEEN: "Fifteen-All",
+        THIRTY: "Thirty-All"
     }
 
     def __init__(self, player1_name, player2_name):
@@ -47,7 +47,7 @@ class TennisGame:
             return "Advantage player1"
         elif score_difference == -1:
             return "Advantage player2"
-        elif score_difference >= self.win_margin:
+        elif score_difference >= self.WIN_MARGIN:
             return "Win for player1"
         else:
             return "Win for player2"
@@ -60,7 +60,7 @@ class TennisGame:
     def get_score(self):
         if self.player1_score == self.player2_score:
             return self._format_even_score()
-        elif self.player1_score >= self.win_threshold or self.player2_score >= self.win_threshold:
+        elif self.player1_score >= self.WIN_THRESHOLD or self.player2_score >= self.WIN_THRESHOLD:
             return self._format_advantage_or_win()
         else:
             return self._format_regular_score()
