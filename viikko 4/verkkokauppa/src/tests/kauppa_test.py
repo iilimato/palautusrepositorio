@@ -259,18 +259,14 @@ class TestKauppa(unittest.TestCase):
 
         kauppa = Kauppa(varasto_mock, pankki_mock, viitegeneraattori_mock)
 
-        # Lisätään kaksi tuotetta
         kauppa.aloita_asiointi()
         kauppa.lisaa_koriin(1)  # maito 5€
         kauppa.lisaa_koriin(2)  # leipä 3€
         
-        # Poistetaan maito
         kauppa.poista_korista(1)
         
         kauppa.tilimaksu("pekka", "12345")
 
-        # Varmistetaan että palauta_varastoon kutsuttiin
         varasto_mock.palauta_varastoon.assert_called()
         
-        # Hinta pitäisi olla vain leivän hinta (3€)
         pankki_mock.tilisiirto.assert_called_with("pekka", 42, "12345", ANY, 3)
