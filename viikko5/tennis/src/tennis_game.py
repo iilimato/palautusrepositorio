@@ -1,4 +1,12 @@
 class TennisGame:
+    # Tennis score constants
+    love = 0
+    fifteen = 1
+    thirty = 2
+    forty = 3
+    win_threshold = 4
+    win_margin = 2
+    
     def __init__(self, player1_name, player2_name):
         self.player1_name = player1_name
         self.player2_name = player2_name
@@ -16,22 +24,22 @@ class TennisGame:
         temp_score = 0
 
         if self.player1_score == self.player2_score:
-            if self.player1_score == 0:
+            if self.player1_score == self.love:
                 score = "Love-All"
-            elif self.player1_score == 1:
+            elif self.player1_score == self.fifteen:
                 score = "Fifteen-All"
-            elif self.player1_score == 2:
+            elif self.player1_score == self.thirty:
                 score = "Thirty-All"
             else:
                 score = "Deuce"
-        elif self.player1_score >= 4 or self.player2_score >= 4:
-            minus_result = self.player1_score - self. player2_score
+        elif self.player1_score >= self.win_threshold or self.player2_score >= self.win_threshold:
+            minus_result = self.player1_score - self.player2_score
 
             if minus_result == 1:
                 score = "Advantage player1"
             elif minus_result == -1:
                 score = "Advantage player2"
-            elif minus_result >= 2:
+            elif minus_result >= self.win_margin:
                 score = "Win for player1"
             else:
                 score = "Win for player2"
@@ -43,13 +51,13 @@ class TennisGame:
                     score = score + "-"
                     temp_score = self.player2_score
 
-                if temp_score == 0:
+                if temp_score == self.love:
                     score = score + "Love"
-                elif temp_score == 1:
+                elif temp_score == self.fifteen:
                     score = score + "Fifteen"
-                elif temp_score == 2:
+                elif temp_score == self.thirty:
                     score = score + "Thirty"
-                elif temp_score == 3:
+                elif temp_score == self.forty:
                     score = score + "Forty"
 
         return score
