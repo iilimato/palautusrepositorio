@@ -28,12 +28,14 @@ class TennisGame:
         return score_names[score]
 
     def _format_even_score(self):
-        if self.player1_score == self.love:
-            return "Love-All"
-        elif self.player1_score == self.fifteen:
-            return "Fifteen-All"
-        elif self.player1_score == self.thirty:
-            return "Thirty-All"
+        even_score_names = {
+            self.love: "Love-All",
+            self.fifteen: "Fifteen-All",
+            self.thirty: "Thirty-All"
+        }
+
+        if self.player1_score in even_score_names:
+            return even_score_names[self.player1_score]
         else:
             return "Deuce"
 
