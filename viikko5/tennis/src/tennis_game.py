@@ -6,6 +6,19 @@ class TennisGame:
     win_threshold = 4
     win_margin = 2
 
+    _SCORE_NAMES = {
+        love: "Love",
+        fifteen: "Fifteen",
+        thirty: "Thirty",
+        forty: "Forty"
+    }
+
+    _EVEN_SCORE_NAMES = {
+        love: "Love-All",
+        fifteen: "Fifteen-All",
+        thirty: "Thirty-All"
+    }
+
     def __init__(self, player1_name, player2_name):
         self.player1_name = player1_name
         self.player2_name = player2_name
@@ -19,23 +32,11 @@ class TennisGame:
             self.player2_score = self.player2_score + 1
 
     def _score_name(self, score):
-        score_names = {
-            self.love: "Love",
-            self.fifteen: "Fifteen",
-            self.thirty: "Thirty",
-            self.forty: "Forty"
-        }
-        return score_names[score]
+        return self._SCORE_NAMES[score]
 
     def _format_even_score(self):
-        even_score_names = {
-            self.love: "Love-All",
-            self.fifteen: "Fifteen-All",
-            self.thirty: "Thirty-All"
-        }
-
-        if self.player1_score in even_score_names:
-            return even_score_names[self.player1_score]
+        if self.player1_score in self._EVEN_SCORE_NAMES:
+            return self._EVEN_SCORE_NAMES[self.player1_score]
         else:
             return "Deuce"
 
