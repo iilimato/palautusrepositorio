@@ -49,22 +49,15 @@ class TennisGame:
         else:
             return "Win for player2"
 
-    def get_score(self):
-        score = ""
-        temp_score = 0
+    def _format_regular_score(self):
+        player1_score_text = self._score_name(self.player1_score)
+        player2_score_text = self._score_name(self.player2_score)
+        return f"{player1_score_text}-{player2_score_text}"
 
+    def get_score(self):
         if self.player1_score == self.player2_score:
             return self._format_even_score()
         elif self.player1_score >= self.win_threshold or self.player2_score >= self.win_threshold:
             return self._format_advantage_or_win()
         else:
-            for i in range(1, 3):
-                if i == 1:
-                    temp_score = self.player1_score
-                else:
-                    score = score + "-"
-                    temp_score = self.player2_score
-
-                score = score + self._score_name(temp_score)
-
-        return score
+            return self._format_regular_score()
