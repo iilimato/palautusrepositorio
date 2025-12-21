@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kivi-Paperi-Sakset</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 40px;
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 2rem;
+        }
+
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        .game-selection {
+            margin-bottom: 30px;
+        }
+
+        .game-selection h3 {
+            margin-bottom: 15px;
+            color: #444;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(249, 115, 22, 0.4);
+        }
+
+        .btn-secondary {
+            background: #f0f0f0;
+            color: #333;
+        }
+
+        .btn-secondary:hover {
+            background: #e0e0e0;
+        }
+
+        .btn-secondary.active {
+            background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+            color: white;
+        }
+
+        .scoreboard {
+            display: flex;
+            justify-content: space-around;
+            margin: 30px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 15px;
+        }
+
+        .score-item {
+            text-align: center;
+        }
+
+        .score-label {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+        .score-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .score-value.player {
+            color: #28a745;
+        }
+
+        .score-value.ai {
+            color: #dc3545;
+        }
+
+        .score-value.draws {
+            color: #ffc107;
+        }
+
+        .game-area {
+            display: none;
+        }
+
+        .game-area.active {
+            display: block;
+        }
+
+        .moves {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 30px 0;
+        }
+
+        .move-btn {
+            width: 100px;
+            height: 100px;
+            border: 3px solid #e0e0e0;
+            border-radius: 20px;
+            background: white;
+            cursor: pointer;
+            font-size: 3rem;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .move-btn:hover {
+            border-color: #f97316;
+            transform: scale(1.1);
+            box-shadow: 0 10px 30px rgba(249, 115, 22, 0.3);
+        }
+
+        .move-btn:active {
+            transform: scale(0.95);
+        }
+
+        .result-area {
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .battle {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 30px;
+            margin: 20px 0;
+        }
+
+        .battle-move {
+            text-align: center;
+        }
+
+        .battle-emoji {
+            font-size: 4rem;
+            margin-bottom: 10px;
+        }
+
+        .battle-label {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .vs {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #999;
+        }
+
+        .result-text {
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin-top: 20px;
+            padding: 10px 30px;
+            border-radius: 10px;
+        }
+
+        .result-text.win {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .result-text.lose {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .result-text.draw {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .instructions {
+            color: #666;
+            font-size: 0.9rem;
+            margin-top: 20px;
+        }
+
+        .game-type-label {
+            display: inline-block;
+            padding: 5px 15px;
+            background: #e9ecef;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            color: #495057;
+            margin-bottom: 20px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .shake {
+            animation: shake 0.5s ease-in-out;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Kivi-Paperi-Sakset</h1>
+        <p class="subtitle">Rock-Paper-Scissors</p>
+
+        <!-- Game Selection -->
+        <div id="menu" class="game-selection">
+            <h3>Valitse vastustaja:</h3>
+            <div class="btn-group">
+                <button class="btn btn-secondary" id="btn-simple" onclick="selectGameType('simple')">
+                    Helppo AI
+                </button>
+                <button class="btn btn-secondary active" id="btn-enhanced" onclick="selectGameType('enhanced')">
+                    Vaikea AI
+                </button>
+            </div>
+            <br><br>
+            <button class="btn btn-primary" onclick="startGame()">Aloita peli</button>
+        </div>
+
+        <!-- Game Area -->
+        <div id="game" class="game-area">
+            <div class="game-type-label" id="game-type-label">Vaikea AI</div>
+
+            <div class="scoreboard">
+                <div class="score-item">
+                    <div class="score-label">Sinun pisteet</div>
+                    <div class="score-value player" id="player-score">0</div>
+                </div>
+                <div class="score-item">
+                    <div class="score-label">Tasapelit</div>
+                    <div class="score-value draws" id="draws">0</div>
+                </div>
+                <div class="score-item">
+                    <div class="score-label">AI:n pisteet</div>
+                    <div class="score-value ai" id="ai-score">0</div>
+                </div>
+            </div>
+
+            <p class="instructions" id="instructions">Valitse siirtosi (ensimmäinen 3 voittoon):</p>
+
+            <div class="moves" id="moves">
+                <button class="move-btn" onclick="play('k')" title="Kivi">🪨</button>
+                <button class="move-btn" onclick="play('p')" title="Paperi">📄</button>
+                <button class="move-btn" onclick="play('s')" title="Sakset">✂️</button>
+            </div>
+
+            <div class="result-area" id="result-area">
+                <p style="color: #999;">Tee ensimmäinen siirtosi!</p>
+            </div>
+
+            <button class="btn btn-secondary" onclick="newGame()">Uusi peli</button>
+        </div>
+    </div>
+
+    <script>
+        let selectedGameType = 'enhanced';
+
+        function selectGameType(type) {
+            selectedGameType = type;
+            document.getElementById('btn-simple').classList.toggle('active', type === 'simple');
+            document.getElementById('btn-enhanced').classList.toggle('active', type === 'enhanced');
+        }
+
+        async function startGame() {
+            try {
+                const response = await fetch('/api/new-game', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ game_type: selectedGameType })
+                });
+
+                const data = await response.json();
+                if (data.success) {
+                    document.getElementById('menu').style.display = 'none';
+                    document.getElementById('game').classList.add('active');
+                    document.getElementById('game-type-label').textContent =
+                        selectedGameType === 'simple' ? 'Helppo AI' : 'Vaikea AI';
+                    updateScore(data.score);
+                    document.getElementById('result-area').innerHTML =
+                        '<p style="color: #999;">Tee ensimmäinen siirtosi!</p>';
+                }
+            } catch (error) {
+                console.error('Error starting game:', error);
+            }
+        }
+
+        async function play(move) {
+            try {
+                const response = await fetch('/api/play', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ move })
+                });
+
+                const data = await response.json();
+                if (data.success) {
+                    updateScore(data.score);
+                    showResult(data);
+                } else {
+                    alert(data.error || 'Virhe pelissä');
+                }
+            } catch (error) {
+                console.error('Error playing:', error);
+            }
+        }
+
+        function updateScore(score) {
+            document.getElementById('player-score').textContent = score.player;
+            document.getElementById('ai-score').textContent = score.ai;
+            document.getElementById('draws').textContent = score.draws;
+        }
+
+        function showResult(data) {
+            const resultArea = document.getElementById('result-area');
+            let gameOverHtml = '';
+
+            if (data.game_over) {
+                const winnerText = data.game_winner === 'player' ? 'Voitit pelin!' : 'AI voitti pelin!';
+                const winnerClass = data.game_winner === 'player' ? 'win' : 'lose';
+                gameOverHtml = `<div class="result-text ${winnerClass}" style="margin-top: 15px; font-size: 1.5rem;">${winnerText}</div>`;
+                document.getElementById('moves').style.display = 'none';
+                document.getElementById('instructions').textContent = 'Peli päättyi!';
+            }
+
+            resultArea.innerHTML = `
+                <div class="battle">
+                    <div class="battle-move">
+                        <div class="battle-emoji">${data.player_move_emoji}</div>
+                        <div class="battle-label">Sinä: ${data.player_move_name}</div>
+                    </div>
+                    <div class="vs">VS</div>
+                    <div class="battle-move">
+                        <div class="battle-emoji">${data.ai_move_emoji}</div>
+                        <div class="battle-label">AI: ${data.ai_move_name}</div>
+                    </div>
+                </div>
+                <div class="result-text ${data.result}">${data.result_text}</div>
+                ${gameOverHtml}
+            `;
+        }
+
+        function newGame() {
+            document.getElementById('menu').style.display = 'block';
+            document.getElementById('game').classList.remove('active');
+            document.getElementById('player-score').textContent = '0';
+            document.getElementById('ai-score').textContent = '0';
+            document.getElementById('draws').textContent = '0';
+            document.getElementById('moves').style.display = 'flex';
+            document.getElementById('instructions').textContent = 'Valitse siirtosi (ensimmäinen 3 voittoon):';
+        }
+    </script>
+</body>
+</html>
